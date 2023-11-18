@@ -58,6 +58,10 @@ p {
   color: #f8f8f8;
 }
 
+.error {
+  text-align: center;
+}
+
 .main-container {
   max-width: 700px;
   height: 600px;
