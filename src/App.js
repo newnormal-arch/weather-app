@@ -13,36 +13,17 @@ function App() {
   const searchLocation = (event) => {
     if (event.key === 'Enter') {
       axios.get(url).then((response) => {
-        if (response.status === 404) {
-          const error = new Error();
-          throw error;
-        } else {
-          setData(response.data)
-          console.log(response.data)
-        }
+          setError('');
+          setData(response.data);
+          console.log(response.data);        
       }).catch(error => {
-        setError('City Not Found');
+        setError('City not found. Please enter a valid City Name');
         setData({});
         console.log('City Not Found')
       });
       setLocation('')
     }
   }
-
-  /* const searchLocation = (event) => {
-    if (event.key === 'Enter') {
-      fetch(url).then(res => {
-        if (res.status === 404) {
-          const error = new Error();
-          error.message = 'City Not Found';
-          throw error;
-        }
-      }).then(res => res.json()).then(result => {
-        setData(result.data);
-        console.log(result)
-      }).catch(error => console.log(error.message));
-    }
-  } */
 
   return (
     <div className="App">
@@ -54,11 +35,12 @@ function App() {
           placeholder='Enter Location'
           type='text' />
       </div>
-      {error && <p className="error">{error}</p>}
+      
       <div className='main-container'>
         <div className='top'>
           <div className='location-details'>
             <p>{data.name}</p>
+            {error && <p className="error">{error}</p>}
           </div>
 
           <div className='temp'>
@@ -86,7 +68,11 @@ function App() {
             </div>
           </div>
         }
+        <div className='footer'>
+        <p>Designed & Built by <a href='https://github.com/newnormal-arch'>Bongani Ntshingila</a></p>
       </div>
+      </div>
+      
     </div>
   );
 }
