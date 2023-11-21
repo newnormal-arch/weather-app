@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { FiSearch } from "react-icons/fi";
 
 
 function App() {
@@ -10,19 +11,17 @@ function App() {
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${API_KEY}`;
 
-  const searchLocation = (event) => {
-    if (event.key === 'Enter') {
-      axios.get(url).then((response) => {
-          setError('');
-          setData(response.data);
-          console.log(response.data);        
-      }).catch(error => {
-        setError('City not found. Please enter a valid City Name');
-        setData({});
-        console.log('City Not Found')
-      });
-      setLocation('')
-    }
+  const searchLocation = () => {
+    axios.get(url).then((response) => {
+      setError('');
+      setData(response.data);
+      console.log(response.data);
+    }).catch(error => {
+      setError('City not found. Please enter a valid City Name');
+      setData({});
+      console.log('City Not Found')
+    });
+    setLocation('')
   }
 
   return (
@@ -31,11 +30,16 @@ function App() {
         <input
           value={location}
           onChange={event => setLocation(event.target.value)}
-          onKeyPress={searchLocation}
+          onKeyPress={(event) => {
+            if (event.key === 'Enter') {
+              searchLocation()
+            }
+          }}
           placeholder='Enter Location'
           type='text' />
+        <button onClick={searchLocation}><FiSearch /></button>
       </div>
-      
+
       <div className='main-container'>
         <div className='top'>
           <div className='location-details'>
@@ -49,6 +53,7 @@ function App() {
 
           <div className='description'>
             <p>{data.weather ? <p>{data.weather[0].main}</p> : null}</p>
+            <i>{data.weather ? <img className='icon-img' src={`http://openweathermap.org/img/w/${data.weather[0].icon}.png`} alt="" /> : null}</i>
           </div>
 
         </div>
@@ -69,10 +74,10 @@ function App() {
           </div>
         }
         <div className='footer'>
-        <p>Designed & Built by <a href='https://github.com/newnormal-arch'>Bongani Ntshingila</a></p>
+          <p>Designed & Built by <a href='https://github.com/newnormal-arch'>Bongani Ntshingila</a></p>
+        </div>
       </div>
-      </div>
-      
+
     </div>
   );
 }
